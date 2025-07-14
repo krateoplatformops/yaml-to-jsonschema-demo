@@ -16,12 +16,12 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Generate JSON Schema from YAML
-        uses: krateoplatformops/yaml-to-jsonschema@v0.2.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: addnab/docker-run-action@v3
         with:
-          yamlFile: chart/values.yaml
-          #destinationDir: chart
+          image: ghcr.io/krateoplatformops/krateoctl:latest
+          options: --pull always
+          run: |
+            krateoctl gen-schema -output chart/values.schema.json chart/values.yaml
 
       - name: Commit changes
         run: |
