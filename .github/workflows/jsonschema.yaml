@@ -24,10 +24,22 @@ jobs:
             cd /workspace
             krateoctl gen-schema -output chart/values.schema.json chart/values.yaml
 
-      - name: Commit changes
+      - name: Commit changes (if needed)
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          git fetch origin main
+
+          git checkout main
+
           git add .
+
+          if git diff --cached --quiet; then
+            echo "nothing to commit."
+            exit 0
+          fi
+
           git commit -m "chore: update JSON Schema via GitHub Actions"
-          git push origin HEAD:main
+          git push origin main
+
