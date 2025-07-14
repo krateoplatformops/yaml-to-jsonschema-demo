@@ -19,7 +19,7 @@ jobs:
         uses: addnab/docker-run-action@v3
         with:
           image: ghcr.io/krateoplatformops/krateoctl:latest
-          options: --pull always
+          options: --pull always -v ${{ github.workspace }}:/workspace
           run: |
             krateoctl gen-schema -output chart/values.schema.json chart/values.yaml
 
