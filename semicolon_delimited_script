@@ -1,0 +1,3 @@
+cd /workspace
+krateoctl gen-schema -output chart/values.schema.json chart/values.yaml
+
