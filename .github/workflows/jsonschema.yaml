@@ -7,24 +7,22 @@ on:
 
 jobs:
   run-action:
+    runs-on: ubuntu-latest
     permissions:
       contents: write
       packages: read
-      
-    runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/krateoplatformops/krateoctl:latest
-      options: --pull always
-    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: List files for debug
-        run: ls -R
-
       - name: Generate JSON Schema from YAML
-        run: krateoctl gen-schema -output chart/values.schema.json chart/values.yaml
+        uses: addnab/docker-run-action@v3
+        with:
+          image: ghcr.io/krateoplatformops/krateoctl:latest
+          options: --pull always -v ${{ github.workspace }}:/workspace
+          run: |
+            cd /workspace
+            krateoctl gen-schema -output chart/values.schema.json chart/values.yaml
 
       - name: Commit changes
         run: |
